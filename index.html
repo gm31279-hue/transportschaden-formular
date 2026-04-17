@@ -4,3 +4,626 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Transportschaden melden – Stölner GmbH</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap');
+
+  :root {
+    --pink: #E5007D;
+    --pink-light: #FCE8F2;
+    --pink-mid: #F4C0D5;
+    --dark: #1A1A1A;
+    --mid: #555550;
+    --light: #F7F6F3;
+    --border: #E0DED8;
+    --white: #ffffff;
+    --radius: 10px;
+    --success: #1D9E75;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--light);
+    color: var(--dark);
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  /* TOP BAR */
+  .topbar {
+    background: var(--white);
+    padding: 16px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1.5px solid var(--border);
+  }
+  .topbar-logo {
+    height: 36px;
+    width: auto;
+  }
+  .topbar-tag {
+    font-size: 11px;
+    color: #999;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* HERO STRIP */
+  .hero {
+    background: var(--pink);
+    padding: 40px 40px 36px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    right: -60px;
+    top: -60px;
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    right: 80px;
+    bottom: -80px;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+  }
+  .hero-label {
+    font-size: 11px;
+    color: rgba(255,255,255,0.65);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .hero-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 36px;
+    color: var(--white);
+    line-height: 1.15;
+    margin-bottom: 12px;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-sub {
+    font-size: 14px;
+    color: rgba(255,255,255,0.78);
+    max-width: 520px;
+    line-height: 1.6;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* HINWEIS BOX */
+  .hint {
+    background: var(--white);
+    border-left: 4px solid var(--pink);
+    margin: 28px 40px 0;
+    padding: 14px 18px;
+    border-radius: 0 var(--radius) var(--radius) 0;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .hint-icon {
+    width: 20px;
+    height: 20px;
+    background: var(--pink);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .hint-icon::after {
+    content: '!';
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .hint-text {
+    font-size: 13px;
+    color: var(--mid);
+    line-height: 1.55;
+  }
+  .hint-text strong {
+    color: var(--dark);
+    font-weight: 500;
+  }
+
+  /* FORM WRAPPER */
+  .form-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 28px 40px 60px;
+  }
+
+  /* SECTION */
+  .section {
+    margin-bottom: 32px;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1.5px solid var(--border);
+  }
+  .section-num {
+    width: 26px;
+    height: 26px;
+    background: var(--pink);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--dark);
+    letter-spacing: 0.01em;
+  }
+
+  /* GRID */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .grid-1 { display: grid; grid-template-columns: 1fr; gap: 14px; }
+  .col-full { grid-column: 1 / -1; }
+
+  /* FIELD */
+  .field { display: flex; flex-direction: column; gap: 5px; }
+  .field label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--mid);
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+  .field input,
+  .field textarea,
+  .field select {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--dark);
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 11px 14px;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    width: 100%;
+    -webkit-appearance: none;
+  }
+  .field input:focus,
+  .field textarea:focus,
+  .field select:focus {
+    border-color: var(--pink);
+    box-shadow: 0 0 0 3px rgba(229,0,125,0.1);
+  }
+  .field textarea {
+    resize: vertical;
+    min-height: 90px;
+    line-height: 1.55;
+  }
+  .field input::placeholder,
+  .field textarea::placeholder {
+    color: #bbb;
+  }
+
+  /* CHECKBOXES */
+  .check-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .check-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    padding: 10px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--white);
+    transition: border-color 0.15s, background 0.15s;
+    user-select: none;
+  }
+  .check-item:hover {
+    border-color: var(--pink-mid);
+    background: var(--pink-light);
+  }
+  .check-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--pink);
+    flex-shrink: 0;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  .check-item.checked {
+    border-color: var(--pink);
+    background: var(--pink-light);
+  }
+  .check-item span {
+    font-size: 14px;
+    color: var(--dark);
+    line-height: 1.4;
+  }
+
+  /* SUBMIT AREA */
+  .submit-area {
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1.5px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .submit-info {
+    font-size: 13px;
+    color: var(--mid);
+    line-height: 1.55;
+  }
+  .submit-info strong {
+    color: var(--dark);
+    font-weight: 500;
+  }
+  .btn-submit {
+    background: var(--pink);
+    color: white;
+    border: none;
+    padding: 14px 32px;
+    border-radius: var(--radius);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+  }
+  .btn-submit:hover {
+    background: #c4006b;
+    transform: translateY(-1px);
+  }
+  .btn-submit:active {
+    transform: translateY(0);
+  }
+
+  /* SUCCESS STATE */
+  .success-state {
+    display: none;
+    text-align: center;
+    padding: 60px 40px;
+  }
+  .success-icon {
+    width: 64px;
+    height: 64px;
+    background: var(--success);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+  }
+  .success-icon svg { width: 28px; height: 28px; }
+  .success-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    color: var(--dark);
+    margin-bottom: 10px;
+  }
+  .success-sub {
+    font-size: 15px;
+    color: var(--mid);
+    max-width: 380px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* FOOTER */
+  .footer {
+    background: var(--dark);
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .footer-text {
+    font-size: 12px;
+    color: #666;
+  }
+  .footer-contact {
+    font-size: 12px;
+    color: var(--pink);
+  }
+
+  /* DOWNLOAD BADGE */
+  .download-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 14px;
+    font-size: 12px;
+    color: var(--mid);
+    cursor: pointer;
+    text-decoration: none;
+    transition: border-color 0.15s;
+  }
+  .download-badge:hover {
+    border-color: var(--pink);
+    color: var(--pink);
+  }
+
+  @media (max-width: 600px) {
+    .topbar, .hero, .form-wrap, .footer { padding-left: 20px; padding-right: 20px; }
+    .hint { margin-left: 20px; margin-right: 20px; }
+    .grid-2 { grid-template-columns: 1fr; }
+    .hero-title { font-size: 26px; }
+    .submit-area { flex-direction: column; align-items: stretch; }
+    .btn-submit { text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <img src="stoelner.png" alt="Stölner GmbH" class="topbar-logo">
+  <div class="topbar-tag">Partner, nicht Lieferant</div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-label">Fachhandelspartner · Service</div>
+  <div class="hero-title">Transportschaden melden</div>
+  <div class="hero-sub">Bitte das Formular vollständig ausfüllen. Unser Vertriebsinnendienst meldet sich innerhalb von 24 Stunden.</div>
+</div>
+
+<!-- HINT -->
+<div class="hint">
+  <div class="hint-icon"></div>
+  <div class="hint-text">
+    <strong>Wichtig:</strong> Schaden bitte bei Annahme sofort auf dem Lieferschein vermerken. Fotos vor Ort machen – Originalverpackung bis zur Klärung aufbewahren.
+  </div>
+</div>
+
+<!-- FORM -->
+<div class="form-wrap">
+  <form id="schadensform" novalidate>
+
+    <!-- 1. PARTNER -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">1</div>
+        <div class="section-title">Fachhandelspartner</div>
+      </div>
+      <div class="grid-2">
+        <div class="field">
+          <label>Firma *</label>
+          <input type="text" name="firma" placeholder="Ihr Unternehmen" required>
+        </div>
+        <div class="field">
+          <label>Ansprechpartner *</label>
+          <input type="text" name="ansprechpartner" placeholder="Vor- und Nachname" required>
+        </div>
+        <div class="field">
+          <label>E-Mail *</label>
+          <input type="email" name="email" placeholder="name@firma.at" required>
+        </div>
+        <div class="field">
+          <label>Telefon</label>
+          <input type="tel" name="telefon" placeholder="+43 ...">
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. LIEFERUNG -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">2</div>
+        <div class="section-title">Lieferung</div>
+      </div>
+      <div class="grid-2">
+        <div class="field">
+          <label>Lieferdatum *</label>
+          <input type="date" name="lieferdatum" required>
+        </div>
+        <div class="field">
+          <label>Lieferschein-Nr. *</label>
+          <input type="text" name="lieferschein" placeholder="z. B. LS-2026-1234" required>
+        </div>
+        <div class="field">
+          <label>Bestellnummer / Auftrag</label>
+          <input type="text" name="bestellung" placeholder="z. B. AU-2026-5678">
+        </div>
+        <div class="field">
+          <label>Spedition / Fahrer</label>
+          <input type="text" name="spedition" placeholder="z. B. DPD, Gebrüder Weiss ...">
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. SCHADEN -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">3</div>
+        <div class="section-title">Schaden</div>
+      </div>
+      <div class="grid-2">
+        <div class="field">
+          <label>Betroffenes Gerät / Artikel-Nr. *</label>
+          <input type="text" name="artikel" placeholder="z. B. Rational SCC61 / Art. 4711" required>
+        </div>
+        <div class="field">
+          <label>Art des Schadens *</label>
+          <select name="schadensart" required>
+            <option value="">Bitte wählen</option>
+            <option>Äußere Beschädigung (Gehäuse, Verkleidung)</option>
+            <option>Transportschaden Verpackung</option>
+            <option>Funktionsschaden</option>
+            <option>Komplettverlust</option>
+            <option>Sonstiges</option>
+          </select>
+        </div>
+        <div class="field col-full">
+          <label>Schadensbeschreibung *</label>
+          <textarea name="beschreibung" placeholder="Bitte so genau wie möglich beschreiben: Was ist beschädigt? Wo? In welchem Ausmaß?" required></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. DOKUMENTATION -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">4</div>
+        <div class="section-title">Dokumentation</div>
+      </div>
+      <div class="check-grid">
+        <label class="check-item">
+          <input type="checkbox" name="fotos" onchange="toggleCheck(this)">
+          <span>Fotos vorhanden – bitte als Anhang an <strong>vid@stoelner.at</strong> senden</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" name="lieferschein_dok" onchange="toggleCheck(this)">
+          <span>Lieferschein vorhanden (digital oder als Scan)</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" name="vermerkt" onchange="toggleCheck(this)">
+          <span>Schaden bei Annahme auf dem Lieferschein / Ablieferschein vermerkt</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" name="verpackung" onchange="toggleCheck(this)">
+          <span>Originalverpackung noch vorhanden</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- 5. BEMERKUNGEN -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">5</div>
+        <div class="section-title">Bemerkungen</div>
+      </div>
+      <div class="field">
+        <label>Weitere Hinweise</label>
+        <textarea name="bemerkungen" placeholder="Sonstige Informationen, die für die Abwicklung relevant sind ..."></textarea>
+      </div>
+    </div>
+
+    <!-- HIDDEN FIELDS -->
+    <input type="hidden" name="_replyto" value="">
+    <input type="hidden" name="_subject" value="Transportschaden-Meldung – Stölner Fachhandelspartner">
+    <input type="hidden" name="_next" value="">
+
+    <!-- SUBMIT -->
+    <div class="submit-area">
+      <div class="submit-info">
+        Meldung geht direkt an den <strong>Vertriebsinnendienst</strong>.<br>
+        Rückmeldung innerhalb von <strong>24 Stunden</strong>.
+      </div>
+      <button type="submit" class="btn-submit">Schaden melden</button>
+    </div>
+
+  </form>
+
+  <!-- SUCCESS -->
+  <div class="success-state" id="success">
+    <div class="success-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+    </div>
+    <div class="success-title">Meldung eingegangen.</div>
+    <div class="success-sub">Unser Vertriebsinnendienst meldet sich innerhalb von 24 Stunden bei Ihnen. Bitte Fotos und Lieferschein an vid@stoelner.at senden.</div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-text">© 2026 Stölner GmbH · Alle Rechte vorbehalten</div>
+  <div class="footer-contact">vid@stoelner.at</div>
+</div>
+
+<script>
+function toggleCheck(cb) {
+  cb.closest('.check-item').classList.toggle('checked', cb.checked);
+}
+
+document.getElementById('schadensform').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  // Validation
+  const required = this.querySelectorAll('[required]');
+  let valid = true;
+  required.forEach(el => {
+    el.style.borderColor = '';
+    if (!el.value.trim()) {
+      el.style.borderColor = '#E5007D';
+      valid = false;
+    }
+  });
+  if (!valid) {
+    this.querySelector('[required][style*="E5007D"]')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
+  const btn = this.querySelector('.btn-submit');
+  btn.textContent = 'Wird gesendet ...';
+  btn.disabled = true;
+
+  const formData = new FormData(this);
+
+  // Add subject line
+  formData.append('_subject', 'Transportschaden – ' + (formData.get('firma') || '') + ' / LS ' + (formData.get('lieferschein') || ''));
+
+  try {
+    const res = await fetch('https://formspree.io/f/mrerpwvy', {
+      method: 'POST',
+      headers: { 'Accept': 'application/json' },
+      body: formData
+    });
+
+    if (res.ok) {
+      document.getElementById('schadensform').style.display = 'none';
+      document.getElementById('success').style.display = 'block';
+    } else {
+      const data = await res.json();
+      console.error('Formspree error:', data);
+      btn.textContent = 'Fehler – bitte erneut versuchen';
+      btn.disabled = false;
+      btn.style.background = '#c0392b';
+    }
+  } catch(err) {
+    console.error('Network error:', err);
+    btn.textContent = 'Fehler – bitte erneut versuchen';
+    btn.disabled = false;
+    btn.style.background = '#c0392b';
+  }
+});
+</script>
+
+</body>
+</html>
